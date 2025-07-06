@@ -1,62 +1,48 @@
 package UAS;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class EnergiMain {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
+        EnergiCalculator[] alat = new EnergiCalculator[2];
 
-        System.out.println("=== EnergiCalculator: Pemantau Konsumsi Listrik Kos ===");
+        System.out.println("Masukkan data 2 perangkat elektronik:\n");
 
-        int jumlah = 0;
-
-        // [14] Error Handling
-        try {
-            System.out.print("Berapa jumlah perangkat yang ingin Anda cek? ");
-            jumlah = input.nextInt();
-            input.nextLine();
-        } catch (InputMismatchException e) {
-            System.out.println("️ Input harus berupa angka. Program dihentikan.");
-            return;
-        }
-
-        // [13] Array
-        EnergiCalculator[] perangkat = new EnergiCalculator[jumlah];
-
-        // [11] Perulangan
-        for (int i = 0; i < jumlah; i++) {
-            System.out.println("Masukkan data perangkat ke-" + (i + 1));
+        for (int i = 0; i < alat.length; i++) {
             try {
-                System.out.print("Nama perangkat       : ");
+                System.out.println("Perangkat ke-" + (i + 1));
+                System.out.print("Nama: ");
                 String nama = input.nextLine();
-                System.out.print("Daya listrik (watt)  : ");
-                double daya = input.nextDouble();
-                System.out.print("Durasi pemakaian (jam/hari): ");
-                double durasi = input.nextDouble();
-                input.nextLine();
 
-                // [2] Object → membuat objek dari class
-                if (durasi > 8) {
-                    perangkat[i] = new PerangkatBoros(nama, daya, durasi);
-                } else {
-                    perangkat[i] = new EnergiCalculator(nama, daya, durasi);
-                }
+                System.out.print("Daya (Watt): ");
+                double daya = Double.parseDouble(input.nextLine());
 
-            } catch (InputMismatchException e) {
-                System.out.println("️Input tidak valid. Ulangi data perangkat.");
-                input.nextLine(); // clear buffer
-                i--; // ulang input perangkat ini
+                System.out.print("Durasi Pemakaian (jam): ");
+                double durasi = Double.parseDouble(input.nextLine());
+
+                alat[i] = new EnergiCalculator(nama, daya, durasi);
+                System.out.println();
+            } catch (NumberFormatException e) {
+                System.out.println("Input tidak valid! Silakan masukkan angka yang benar.\n");
+                i--; // ulang input untuk index ini
+            } catch (Exception e) {
+                System.out.println("Terjadi kesalahan: " + e.getMessage() + "\n");
+                i--;
             }
         }
 
-        System.out.println("\n=== Rangkuman Konsumsi Listrik ===");
+        System.out.println("\nInformasi Penggunaan Energi:\n");
 
-        for (EnergiCalculator alat : perangkat) {
-            alat.tampilkanInfo(); // [9] Polymorphism
+        for (EnergiCalculator a : alat) {
+            System.out.println(a.getInfo());
+            if (PerangkatBoros.cekBoros(a)) {
+                System.out.println("Status: Perangkat boros energi.\n");
+            } else {
+                System.out.println("Status: Perangkat hemat energi.\n");
+            }
         }
 
-        System.out.println("\nTerima kasih telah menggunakan EnergiCalculator!");
         input.close();
     }
 }
