@@ -164,7 +164,3 @@ try {
 
 **Nama**: Achmad Syaddid Syaddid
 **NPM**:  2310010677
-
-## Catatan
-
-- Aplikasi ini cocok sebagai pembelajaran dasar tentang efisiensi energi dan penerapan prinsip OOP dalam konteks dunia nyata.
